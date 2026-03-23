@@ -4,6 +4,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   PLUGIN_NAME: AI Subtitle Studio
   PLUGIN_SLUG: ai-subtitle-studio
+  PLUGIN_IDENTIFIER: io.iina.ai-subtitle-studio
 
 on:
   push:
@@ -62,21 +63,26 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
-          PACKAGE_NAME="${PLUGIN_NAME}.iinaplugin"
+          PACKAGE_NAME="${PLUGIN_IDENTIFIER}.iinaplugin"
           PACKAGE_ROOT="release/${PACKAGE_NAME}"
-          ARCHIVE_NAME="${PLUGIN_SLUG}-v${VERSION}.iinaplgz"
+          ARCHIVE_NAME="${PACKAGE_NAME}-${VERSION}.iinaplgz"
 
           rm -rf "release"
-          mkdir -p "${PACKAGE_ROOT}/dist"
+          mkdir -p "${PACKAGE_ROOT}"
 
           cp Info.json "${PACKAGE_ROOT}/"
+          cp README.md "${PACKAGE_ROOT}/"
+          cp jsconfig.json "${PACKAGE_ROOT}/"
+          cp package.json "${PACKAGE_ROOT}/"
+          cp package-lock.json "${PACKAGE_ROOT}/"
           cp pref.html "${PACKAGE_ROOT}/"
           cp sidebar.html "${PACKAGE_ROOT}/"
-          cp README.md "${PACKAGE_ROOT}/"
-          cp dist/index.js "${PACKAGE_ROOT}/dist/"
+          cp -R dist "${PACKAGE_ROOT}/dist"
+          cp -R src "${PACKAGE_ROOT}/src"
+          rm -f "${PACKAGE_ROOT}/dist/index.js.map"
 
-          cd release
-          zip -r -q "${ARCHIVE_NAME}" "${PACKAGE_NAME}"
+          cd "${PACKAGE_ROOT}"
+          zip -r -q "../${ARCHIVE_NAME}" .
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
