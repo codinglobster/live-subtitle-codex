@@ -50,7 +50,13 @@ jobs:
 
       - name: Read plugin version
         id: version
-        run: echo "value=$(node -p 'require(\"./Info.json\").version')" >> "$GITHUB_OUTPUT"
+        run: |
+          VERSION=$(node -p "require('./Info.json').version")
+          if [ -z "$VERSION" ]; then
+            echo "Plugin version is empty" >&2
+            exit 1
+          fi
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Create release package
         env:
