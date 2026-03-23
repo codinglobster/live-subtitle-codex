@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding: 16px;
+            margin: 0;
+            font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        small,
+        .small {
+            font-size: 11px;
+        }
+
+        .secondary {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .pref-section {
+            margin-bottom: 12px;
+        }
+
+        .pref-help {
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pref-section">
+        AI transcription
+        <div style="margin-top: 4px; line-height: 24px">
+            <div>
+                <label for="groq-api-key">Groq API key</label>
+                <input id="groq-api-key" type="text" data-pref-key="groq_api_key"
+                    style="width: 100%; margin-top: 2px" />
+            </div>
+            <div style="margin-top: 8px">
+                <label for="whisper-model">Whisper model</label>
+                <input id="whisper-model" type="text" data-pref-key="whisper_model"
+                    style="width: 100%; margin-top: 2px" />
+            </div>
+            <div style="margin-top: 8px">
+                <label for="transcription-language">Input language (ISO-639-1, optional)</label>
+                <input id="transcription-language" type="text" data-pref-key="transcription_language"
+                    style="width: 100%; margin-top: 2px" />
+            </div>
+            <div style="margin-top: 8px">
+                <label for="transcription-prompt">Prompt (optional)</label>
+                <input id="transcription-prompt" type="text" data-pref-key="transcription_prompt"
+                    style="width: 100%; margin-top: 2px" />
+            </div>
+        </div>
+        <p class="small pref-help secondary">
+            The plugin extracts the current media's audio with ffmpeg, uploads it to Groq Whisper,
+            then generates and loads a temporary SRT subtitle file automatically.
+        </p>
+    </div>
+</body>
+
+</html>

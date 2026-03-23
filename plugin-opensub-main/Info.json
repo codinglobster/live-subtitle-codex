@@ -1,0 +1,28 @@
+{
+  "name": "AI Subtitle Studio",
+  "identifier": "io.iina.ai-subtitle-studio",
+  "version": "0.0.1",
+  "description": "IINA plugin for Groq Whisper subtitle generation",
+  "author": {
+    "name": "AI Subtitle Studio"
+  },
+  "entry": "dist/index.js",
+  "permissions": ["show-osd", "file-system", "network-request"],
+  "allowedDomains": ["*"],
+  "sidebarTab": {
+    "name": "AI Subtitle"
+  },
+  "subtitleProviders": [
+    {
+      "id": "ai-subtitle",
+      "name": "AI Subtitle Studio"
+    }
+  ],
+  "preferencesPage": "pref.html",
+  "preferenceDefaults": {
+    "groq_api_key": "",
+    "whisper_model": "whisper-large-v3-turbo",
+    "transcription_language": "",
+    "transcription_prompt": ""
+  }
+}
