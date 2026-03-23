@@ -10,7 +10,17 @@ on:
     branches:
       - main
     paths:
-      - "ai-subtitle-studio/**"
+      - "src/**"
+      - "Info.json"
+      - "README.md"
+      - "package.json"
+      - "package-lock.json"
+      - "pref.html"
+      - "sidebar.html"
+      - ".gitignore"
+      - ".parcelrc"
+      - ".editorconfig"
+      - "jsconfig.json"
       - ".github/workflows/release-plugin.yml"
   workflow_dispatch:
 
@@ -30,19 +40,16 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: ai-subtitle-studio/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: ai-subtitle-studio
         run: npm ci
 
       - name: Build plugin
-        working-directory: ai-subtitle-studio
         run: npm run build
 
       - name: Read plugin version
         id: version
-        working-directory: ai-subtitle-studio
         run: echo "value=$(node -p 'require(\"./Info.json\").version')" >> "$GITHUB_OUTPUT"
 
       - name: Create release package
@@ -50,26 +57,26 @@ jobs:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
           PACKAGE_NAME="${PLUGIN_NAME}.iinaplugin"
-          PACKAGE_ROOT="ai-subtitle-studio/release/${PACKAGE_NAME}"
+          PACKAGE_ROOT="release/${PACKAGE_NAME}"
           ARCHIVE_NAME="${PLUGIN_SLUG}-v${VERSION}.iinaplgz"
 
-          rm -rf "ai-subtitle-studio/release"
+          rm -rf "release"
           mkdir -p "${PACKAGE_ROOT}/dist"
 
-          cp ai-subtitle-studio/Info.json "${PACKAGE_ROOT}/"
-          cp ai-subtitle-studio/pref.html "${PACKAGE_ROOT}/"
-          cp ai-subtitle-studio/sidebar.html "${PACKAGE_ROOT}/"
-          cp ai-subtitle-studio/README.md "${PACKAGE_ROOT}/"
-          cp ai-subtitle-studio/dist/index.js "${PACKAGE_ROOT}/dist/"
+          cp Info.json "${PACKAGE_ROOT}/"
+          cp pref.html "${PACKAGE_ROOT}/"
+          cp sidebar.html "${PACKAGE_ROOT}/"
+          cp README.md "${PACKAGE_ROOT}/"
+          cp dist/index.js "${PACKAGE_ROOT}/dist/"
 
-          cd ai-subtitle-studio/release
+          cd release
           zip -r -q "${ARCHIVE_NAME}" "${PACKAGE_NAME}"
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.PLUGIN_SLUG }}-v${{ steps.version.outputs.value }}
+          tag_name: ${{ steps.version.outputs.value }}
           name: ${{ env.PLUGIN_NAME }} v${{ steps.version.outputs.value }}
           generate_release_notes: true
-          prerelease: true
-          files: ai-subtitle-studio/release/*.iinaplgz
+          prerelease: false
+          files: release/*.iinaplgz
